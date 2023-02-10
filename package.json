@@ -6,9 +6,9 @@
     "build": "rollup --config"
   },
   "devDependencies": {
-    "@rollup/plugin-json": "^6.0.0",
-    "rollup": "^3.12.0",
-    "rollup-plugin-terser": "^7.0.2"
+    "rollup": "^3.12.0"
+  },
+  "dependencies": {
+    "three": "^0.149.0"
   }
-
 }
