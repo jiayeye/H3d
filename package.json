@@ -1,0 +1,14 @@
+{
+  "name": "h3d",
+  "version": "0.0.1",
+  "type": "module",
+  "scripts": {
+    "build": "rollup --config"
+  },
+  "devDependencies": {
+    "@rollup/plugin-json": "^6.0.0",
+    "rollup": "^3.12.0",
+    "rollup-plugin-terser": "^7.0.2"
+  }
+
+}
