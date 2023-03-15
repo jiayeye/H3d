@@ -1,19 +1,29 @@
-import * as THREE from 'three';
-import { WebGLRenderer, PerspectiveCamera, AxesHelper, Scene, RGBFormat, LinearMipmapLinearFilter, sRGBEncoding } from 'three';
-import { PCFSoftShadowMap, WebGLCubeRenderTarget, CubeCamera, MathUtils, NoToneMapping } from 'three';
+import { WebGLRenderer, PerspectiveCamera, AxesHelper, Scene, RGBFormat, LinearMipmapLinearFilter, sRGBEncoding, Color } from 'three';
+import { PCFSoftShadowMap, WebGLCubeRenderTarget, CubeCamera, MathUtils, NoToneMapping, Camera } from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 
 class View3D {
-    constructor(element){
+
+    domElement: HTMLElement;
+
+    scene: Scene | undefined;
+
+    perspectivecamera : PerspectiveCamera | undefined;
+
+    renderer : WebGLRenderer | undefined;
+
+    controls: OrbitControls | undefined;
+
+    fov = 60;
+
+    cameraNear = 10;
+
+    cameraFar = 100000;
+
+    tickId : number | undefined;
+
+    constructor(element: HTMLElement){
         this.domElement = element;
-
-        this.scene = undefined;
-        this.perspectivecamera = undefined;
-        this.renderer = undefined;
-
-        this.fov = 60;
-        this.cameraNear = 10;
-        this.cameraFar = 100000;
 
         this.init();
     }
@@ -27,9 +37,8 @@ class View3D {
 
     createScene(){
         this.scene = new Scene();
-        this.scene.background = new THREE.Color( 0xff0000 );
+        this.scene.background = new Color( 0xff0000 );
         this.perspectivecamera = new PerspectiveCamera(45, window.innerWidth / window.innerHeight, this.cameraNear, this.cameraFar);
-
     }
 
     createRenderer(){
@@ -55,7 +64,7 @@ class View3D {
     }
 
     createControls(){
-        this.controls = new OrbitControls(this.perspectivecamera, this.domElement);
+        this.controls = new OrbitControls(this.perspectivecamera as Camera, this.domElement);
 
         // this.controls.autoRotate = this.__options['spin'];
         this.controls.enableDamping = false;
@@ -63,10 +72,9 @@ class View3D {
         this.controls.maxPolarAngle = Math.PI * 1.0; //Math.PI * 0.35;//Math.PI * 1.0; //
         this.controls.maxDistance = 7500;// 7500; //2500
         this.controls.minDistance = 100; //1000; //1000
-        this.controls.screenSpacePanning = true;
 
         // this.skybox = new Skybox(this, this.renderer);
-        this.perspectivecamera.position.set(0, 600, 1500);
+        (this.perspectivecamera as Camera).position.set(0, 600, 1500);
         this.controls.update();
     }
 
@@ -74,9 +82,9 @@ class View3D {
       // 获取callback handler
       this.tickId = requestAnimationFrame(this.tick.bind(this));
       // 更新control状态
-      this.controls.update();
+      this.controls?.update();
       // 渲染
-      this.renderer.render(this.scene, this.perspectivecamera);
+      this.renderer?.render(this.scene as Scene, this.perspectivecamera as Camera);
     }
 }
 
